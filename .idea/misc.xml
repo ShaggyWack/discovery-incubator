@@ -3,8 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Code Projects/discovery_incubator/discovery-incubator/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Code Projects/discovery_incubator/discovery-incubator/app/src/main/res/layout/activity_main.xml" value="0.24242424242424243" />
         <entry key="..\:/Code Projects/discovery_incubator/discovery-incubator/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Code Projects/discovery_incubator/discovery-incubator/app/src/main/res/layout/list_card_view.xml" value="0.1712962962962963" />
       </map>
     </option>
   </component>
