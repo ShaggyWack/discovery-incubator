@@ -1,29 +1,16 @@
 package com.demo.discovery_incubator
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import java.lang.ref.WeakReference
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filterable {
-
-    private var items: ArrayList<CardItem> = arrayListOf(
-        CardItem("Title 1", "Subtitle 1", R.drawable.dummy_image),
-        CardItem("Title 2", "Subtitle 2", R.drawable.dummy_image),
-        CardItem("Title 3", "Subtitle 3", R.drawable.dummy_image),
-        CardItem("Title 4", "Subtitle 4", R.drawable.dummy_image),
-        CardItem("Title 5", "Subtitle 5", R.drawable.dummy_image),
-        CardItem("Title 6", "Subtitle 6", R.drawable.dummy_image),
-        CardItem("Title 7", "Subtitle 7", R.drawable.dummy_image),
-        CardItem("Title 8", "Subtitle 8", R.drawable.dummy_image)
-    )
-
-    private var filteredItems: ArrayList<CardItem> = ArrayList<CardItem>()
-
-    init {
-        filteredItems = items
-    }
+class RecyclerAdapter(val items: ArrayList<CardItem>, val weakContext: WeakReference<Context>) :
+    RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view =
@@ -32,42 +19,13 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filt
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = filteredItems.get(position).title
-        holder.itemSubtitle.text = filteredItems.get(position).subtitle
-        holder.itemImage.setImageResource(filteredItems.get(position).image)
+        holder.itemTitle.text = items.get(position).title
+        holder.itemSubtitle.text = items.get(position).subtitle
+        Picasso.with(weakContext.get()).load(items.get(position).image).into(holder.itemImage);
     }
 
     override fun getItemCount(): Int {
-        return filteredItems.size
-    }
-
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
-                if (charSearch.isEmpty()) {
-                    filteredItems = items
-                } else {
-                    val resultList = ArrayList<CardItem>()
-                    for (row in items) {
-                        if (row.title.lowercase().contains(charSearch.lowercase())) {
-                            resultList.add(row)
-                        }
-                    }
-                    filteredItems = resultList
-                }
-                val filterResults = FilterResults()
-                filterResults.values = filteredItems
-                return filterResults
-            }
-
-            @Suppress("UNCHECKED_CAST")
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filteredItems = results?.values as ArrayList<CardItem>
-                notifyDataSetChanged()
-            }
-
-        }
+        return items.size
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -85,7 +43,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filt
 
                 Toast.makeText(
                     itemView.context,
-                    "${filteredItems.get(position).title} has been pressed",
+                    "${items.get(position).title} has been pressed",
                     Toast.LENGTH_LONG
                 ).show()
             }

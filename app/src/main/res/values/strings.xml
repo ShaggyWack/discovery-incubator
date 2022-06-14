@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">discovery-incubator</string>
+
+    <string name="base_url">http://frontendshowcase.azurewebsites.net</string>
 </resources>
