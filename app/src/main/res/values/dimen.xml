@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="searchview_height">39dp</dimen>
+    <dimen name="searchview_margintop">5dp</dimen>
+
+    <dimen name="cardview_margin">5dp</dimen>
+    <dimen name="cardview_corner_radius">5dp</dimen>
+    <dimen name="cardview_elevation">3dp</dimen>
+    <dimen name="cardview_padding">4dp</dimen>
+
+    <dimen name="constraintlayout_padding">16dp</dimen>
+
+    <dimen name="imageview_dimensions">100dp</dimen>
+
+    <dimen name="titleview_width">236dp</dimen>
+    <dimen name="titleview_height">39dp</dimen>
+    <dimen name="titleview_marginstart">16dp</dimen>
+    <dimen name="titleview_textsize">30sp</dimen>
+
+    <dimen name="subtitleview_width">236dp</dimen>
+    <dimen name="subtitleview_height">16dp</dimen>
+    <dimen name="subtitleview_marginstart">16dp</dimen>
+    <dimen name="subtitleview_margintop">8dp</dimen>
+</resources>
