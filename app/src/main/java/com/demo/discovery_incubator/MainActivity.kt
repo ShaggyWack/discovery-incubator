@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
+import com.demo.discovery_incubator.databinding.ActivityMainBinding
 
 class MainActivity : Activity(),
     androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -15,15 +15,17 @@ class MainActivity : Activity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.activity_main)
+
+        val viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        super.setContentView(viewBinding.root)
 
         this.layoutManager = LinearLayoutManager(this)
-        recycler_view.layoutManager = this.layoutManager
+        viewBinding.recyclerView.layoutManager = this.layoutManager
 
         this.adapter = RecyclerAdapter()
-        recycler_view.adapter = this.adapter
+        viewBinding.recyclerView.adapter = this.adapter
 
-        search_bar.setOnQueryTextListener(this)
+        viewBinding.searchBar.setOnQueryTextListener(this)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

@@ -4,40 +4,40 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    app:cardBackgroundColor="#89CFF0"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="3dp"
-    app:contentPadding="4dp">
+    android:layout_margin="@dimen/cardview_margin"
+    app:cardBackgroundColor="@color/baby_blue"
+    app:cardCornerRadius="@dimen/cardview_corner_radius"
+    app:cardElevation="@dimen/cardview_elevation"
+    app:contentPadding="@dimen/cardview_padding">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="@dimen/constraintlayout_padding">
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/imageview_dimensions"
+            android:layout_height="@dimen/imageview_dimensions"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_title"
-            android:layout_width="236dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="16dp"
-            android:textSize="30sp"
+            android:layout_width="@dimen/titleview_width"
+            android:layout_height="@dimen/titleview_height"
+            android:layout_marginStart="@dimen/titleview_marginstart"
+            android:textSize="@dimen/titleview_textsize"
             app:layout_constraintLeft_toRightOf="@+id/item_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_subtitle"
-            android:layout_width="236dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/subtitleview_width"
+            android:layout_height="@dimen/subtitleview_height"
+            android:layout_marginStart="@dimen/subtitleview_marginstart"
+            android:layout_marginTop="@dimen/subtitleview_margintop"
             app:layout_constraintLeft_toRightOf="@+id/item_image"
             app:layout_constraintTop_toBottomOf="@+id/item_title" />
 

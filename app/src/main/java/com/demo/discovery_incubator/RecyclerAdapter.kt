@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.ClassCastException
 
 class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filterable {
 
@@ -32,9 +33,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filt
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = filteredItems.get(position).title
-        holder.itemSubtitle.text = filteredItems.get(position).subtitle
-        holder.itemImage.setImageResource(filteredItems.get(position).image)
+        holder.bindViewUsingFilteredItems(position)
     }
 
     override fun getItemCount(): Int {
@@ -61,12 +60,14 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filt
                 return filterResults
             }
 
-            @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filteredItems = results?.values as ArrayList<CardItem>
-                notifyDataSetChanged()
+                try {
+                    filteredItems = results?.values as ArrayList<CardItem>
+                    notifyDataSetChanged()
+                }catch (e:ClassCastException){
+                    // Leave filteredItems as is
+                }
             }
-
         }
     }
 
@@ -89,6 +90,12 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), Filt
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+
+        fun bindViewUsingFilteredItems(position: Int){
+            this.itemTitle.text = filteredItems.get(position).title
+            this.itemSubtitle.text = filteredItems.get(position).subtitle
+            this.itemImage.setImageResource(filteredItems.get(position).image)
         }
     }
 }
