@@ -2,6 +2,7 @@ package com.demo.discovery_incubator
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,23 +52,17 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
             requestInterface.getData()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .map { responseMovieList ->
+                    val cardItemList = ArrayList<CardItem>()
+                    for (item in responseMovieList) {
+                        cardItemList.add(CardItem.fromMovieApiResponse(item))
+                    }
+                    cardItemList
+                }
                 .subscribe(
-                    { result -> handleListResponse(result) },
-                    { error -> handleError(error) })
+                    { result: ArrayList<CardItem> -> handleListResponse(result) },
+                    { error: Throwable -> handleError(error) })
         )
-    }
-
-    private fun handleListResponse(movieList: List<MovieApiResponseModel>) {
-
-        val responseMovieList = ArrayList(movieList)
-        val cardItemList = ArrayList<CardItem>()
-
-        for (item in responseMovieList) {
-            cardItemList.add(CardItem.fromMovieApiResponse(item))
-        }
-
-        this.adapter = RecyclerAdapter(cardItemList, WeakReference(applicationContext))
-        recycler_view.adapter = this.adapter
     }
 
     private fun loadSingleIssueData(issueId: Int) {
@@ -81,10 +76,20 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
             requestInterface.getSingleIssueData(issueId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .map { responseMovie ->
+                    val cardItemList = ArrayList<CardItem>()
+                    cardItemList.add(CardItem.fromMovieApiResponse(responseMovie))
+                    cardItemList
+                }
                 .subscribe(
-                    { result -> handleSingleIssueResponse(result) },
+                    { result -> handleListResponse(result) },
                     { error -> handleError(error) })
         )
+    }
+
+    private fun handleListResponse(movieList: ArrayList<CardItem>) {
+        this.adapter = RecyclerAdapter(movieList, WeakReference(applicationContext))
+        recycler_view.adapter = this.adapter
     }
 
     private fun handleError(error: Throwable) {
@@ -93,14 +98,8 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
             error.localizedMessage,
             Toast.LENGTH_LONG
         ).show()
-    }
 
-    private fun handleSingleIssueResponse(movie: MovieApiResponseModel) {
-        val cardItemList = ArrayList<CardItem>()
-        cardItemList.add(CardItem.fromMovieApiResponse(movie))
-
-        this.adapter = RecyclerAdapter(cardItemList, WeakReference(applicationContext))
-        recycler_view.adapter = this.adapter
+        Log.e("TAG", error.localizedMessage)
     }
 
     override fun onDestroy() {
@@ -116,14 +115,15 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
 
     // SearchView Listeners
     override fun onQueryTextSubmit(query: String?): Boolean {
-        try {
-            val parsedInt = query!!.toInt()
-            loadSingleIssueData(parsedInt)
-        } catch (nfe: NumberFormatException) {
-            // not a valid int
+        if (query != null) {
+            try {
+                val parsedInt = query!!.toInt()
+                loadSingleIssueData(parsedInt)
+            } catch (nfe: NumberFormatException) {
+                // not a valid int
+            }
         }
         return false
-
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
