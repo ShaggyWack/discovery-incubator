@@ -20,9 +20,7 @@ class RecyclerAdapter(val items: ArrayList<CardItem>, val weakContext: WeakRefer
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = items.get(position).title
-        holder.itemSubtitle.text = items.get(position).subtitle
-        Picasso.with(weakContext.get()).load(items.get(position).image).into(holder.itemImage);
+        holder.bindViewUsingItems(position)
     }
 
     override fun getItemCount(): Int {
@@ -50,10 +48,10 @@ class RecyclerAdapter(val items: ArrayList<CardItem>, val weakContext: WeakRefer
             }
         }
 
-        fun bindViewUsingFilteredItems(position: Int){
-            this.itemTitle.text = filteredItems.get(position).title
-            this.itemSubtitle.text = filteredItems.get(position).subtitle
-            this.itemImage.setImageResource(filteredItems.get(position).image)
+        fun bindViewUsingItems(position: Int) {
+            this.itemTitle.text = items.get(position).title
+            this.itemSubtitle.text = items.get(position).subtitle
+            Picasso.with(weakContext.get()).load(items.get(position).image).into(this.itemImage);
         }
     }
 }

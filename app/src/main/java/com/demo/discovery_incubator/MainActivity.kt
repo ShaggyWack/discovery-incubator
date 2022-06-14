@@ -8,6 +8,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.demo.discovery_incubator.databinding.ActivityMainBinding
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.ref.WeakReference
 
 class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTextListener,
     androidx.appcompat.widget.SearchView.OnCloseListener {
@@ -16,13 +23,14 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
     private lateinit var adapter: RecyclerAdapter
 
     private lateinit var dataCompositeDisposable: CompositeDisposable
+    private lateinit var viewBinding: ActivityMainBinding
 
     private val BASE_URL = "http://frontendshowcase.azurewebsites.net"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
         super.setContentView(viewBinding.root)
 
         dataCompositeDisposable = CompositeDisposable()
@@ -30,10 +38,10 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
         this.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerView.layoutManager = this.layoutManager
 
-        this.adapter = RecyclerAdapter()
-        viewBinding.recyclerView.adapter = this.adapter
-
         viewBinding.searchBar.setOnQueryTextListener(this)
+        viewBinding.searchBar.setOnCloseListener (this)
+
+        loadDataList()
     }
 
     private fun loadDataList() {
@@ -84,7 +92,7 @@ class MainActivity : Activity(), androidx.appcompat.widget.SearchView.OnQueryTex
 
     private fun handleListResponse(movieList: ArrayList<CardItem>) {
         this.adapter = RecyclerAdapter(movieList, WeakReference(applicationContext))
-        recycler_view.adapter = this.adapter
+        viewBinding.recyclerView.adapter = this.adapter
     }
 
     private fun handleError(error: Throwable) {
